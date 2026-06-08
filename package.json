@@ -1,0 +1,17 @@
+{
+  "name": "mi-config-ags",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "ags": "*",
+    "gnim": "*"
+  },
+  "prettier": {
+    "semi": false,
+    "tabWidth": 2
+  },
+  "devDependencies": {
+    "@girs/gjs": "^4.0.4",
+    "@girs/gtk-3.0": "^3.24.53-4.0.4"
+  }
+}
