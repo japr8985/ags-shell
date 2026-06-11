@@ -7,6 +7,7 @@ import AstalHyprland from 'gi://AstalHyprland';
 import Wallpaper from "./custtom-bar-nodes/Wallpaper"
 import AIChatButton from "./custtom-bar-nodes/AIChatButton"
 import Clock from "./custtom-bar-nodes/Clock"
+import Hardware from "./custtom-bar-nodes/Hardware"
 
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
@@ -72,9 +73,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         {/* BLOQUE DERECHO: Marcado obligatoriamente con $type="end" */}
         <box $type="end" halign={Gtk.Align.END}>
           <box class="glass-capsule status-capsule">
-            <label class="status-icon net" label="󰖩 " />
-            <label class="status-icon vol" label="󰕾 " />
-            <label class="status-icon bat" label="󰁹 " />
+            <Hardware />
           </box>
         </box>
 

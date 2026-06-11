@@ -8,8 +8,8 @@ function Clock({ format = "%H:%M" }) {
   })
 
   return (
-    <menubutton>
-      <label label={time} />
+    <menubutton class="clock-button">
+      <label label={time} class="clock-label"/>
       <popover>
         <Gtk.Calendar />
       </popover>

@@ -1,32 +1,119 @@
 @import "colors";
 
-// Mixin reutilizable para aplicar el efecto Liquid Glass
 @mixin liquid-glass {
     background: linear-gradient(
         135deg, 
         rgba($background, 0.45) 0%, 
         rgba($background, 0.65) 100%
     );
-    border: 1px solid $glass-border;
-    border-radius: 5px;
-    
+    border-bottom: 1px solid $glass-border;
     box-shadow: 
         inset 0 1px 0 0 $glass-highlight,
         0 4px 12px 0 $shadow-color;
-    
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-// Estilo general de la Barra principal
 .Bar {
-    background: transparent; 
-    
-    .glass-capsule {
-        @include liquid-glass;
-        padding: 4px 8px;
-        margin: 8px 0 0 12px;
-        // CORREGIDO: Línea 15 eliminada ("orientation" no va en CSS)
+    @include liquid-glass;
+    // font-family: "JetBrainsMono Nerd Font", "Noto Color Emoji", sans-serif;
+    // CORREGIDO: Eliminados los porcentajes (100%) prohibidos en GTK4 CSS.
+    // Dejamos que el 'hexpand' del JSX maneje el estiramiento geométrico.
+    .bar-window-container {
+        background: transparent;
     }
+
+    .bar-layout {
+        padding: 4px 16px; 
+    }
+
+    // Removemos por completo los residuos de fondos de las cápsulas intermedias
+    .glass-capsule {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    // Limpieza agresiva de los Menubuttons de GTK4 para que floten transparentes
+    menubutton {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        
+        button {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            color: $foreground;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: $glass-highlight;
+            }
+        }
+    }
+
+    // El Reloj Central
+    .clock-capsule label {
+        font-weight: bold;
+        // color: $foreground;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+    }
+
+    // Iconos de Estado (Derecha)
+    .status-capsule {
+        .status-icon, menubutton button {
+            font-size: 14px;
+            color: rgba($foreground, 0.65);
+            transition: color 0.2s ease;
+            
+            &:hover {
+                color: $color1; // Se ilumina con el acento dinámico de tu wallpaper
+            }
+        }
+    }
+    // ==========================================
+// INDICADORES DE HARDWARE (DENTRO DE LA BARRA)
+// ==========================================
+.hardware-monitor {
+    margin-right: 4px;
+
+    .hw-item {
+        padding: 2px 8px;
+        border-radius: 6px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background: rgba($foreground, 0.05);
+        }
+        
+        .hw-icon {
+            font-size: 14px;
+            margin-right: 6px; // Espacio para que el icono respire del número
+            
+            &.cpu { 
+                color: #50fa7b; 
+                text-shadow: 0 0 8px rgba(#50fa7b, 0.3);
+            }
+            &.ram { 
+                color: #ff79c6; 
+                text-shadow: 0 0 8px rgba(#ff79c6, 0.3);
+            }
+        }
+
+        .hw-value {
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba($foreground, 0.9);
+            font-family: "JetBrainsMono Nerd Font", monospace; // Tipografía fija anti-jittering
+        }
+    }
+}
+
 }
 
 // Estilo de los botones de los Workspaces
@@ -38,6 +125,7 @@
     min-width: 24px;
     min-height: 24px;
     transition: all 0.2s ease;
+    margin: 4px;
 
     label {
         font-size: 14px;
@@ -156,5 +244,129 @@
     &:hover {
         background: $glass-highlight;
         color: $color1;
+    }
+}
+
+// ==========================================
+// MASTER DROWER: PANEL DERECHO SOLID GLASS
+// ==========================================
+.RightPanel {
+    background: transparent;
+
+    .panel-container {
+        // Incrementamos sustancialmente la solidez para aislar el fondo
+        background: rgba(#12131a, 0.85); 
+        border: 1px solid rgba($foreground, 0.08);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 8px 0 8px 12px;
+        // margin: 5px 12px 12px 0; // Se posiciona perfecto debajo de la barra continua
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.55); // Sombra profunda de aislamiento
+    }
+
+    // Bloque 1: Header
+    .panel-header {
+        .user-avatar {
+            min-width: 48px;
+            min-height: 48px;
+            border-radius: 50%; // Mantiene la foto perfectamente redonda
+            background-position: center;
+            background-size: cover; // Ajusta la imagen al círculo sin deformarla
+            background-repeat: no-repeat;
+            border: 2px solid rgba(255, 255, 255, 0.1); // Un borde sutil que destaca sobre el fondo
+        }
+        .user-name {
+            font-weight: 700;
+            font-size: 14px;
+            color: $foreground;
+        }
+        .user-uptime {
+            font-size: 11px;
+            color: rgba($foreground, 0.45);
+        }
+        .action-btn {
+            background: rgba($foreground, 0.04);
+            border: 1px solid rgba($foreground, 0.08);
+            border-radius: 8px;
+            padding: 6px 10px;
+            color: rgba($foreground, 0.7);
+            transition: all 0.2s ease;
+            &:hover {
+                background: rgba($foreground, 0.1);
+                color: $color1;
+            }
+        }
+    }
+
+    // Bloque 2: Quick Toggles (Wi-Fi, Bluetooth)
+    .quick-toggles-grid {
+        margin-top: 4px;
+
+        .toggle-card {
+            background: rgba($background, 0.3);
+            border: 1px solid rgba($foreground, 0.06);
+            border-radius: 12px;
+            padding: 14px 0;
+            color: rgba($foreground, 0.65);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+            .toggle-icon { 
+                font-size: 20px; 
+            }
+            .toggle-title { 
+                font-size: 12px; 
+                font-weight: 600;
+                letter-spacing: 0.3px;
+            }
+
+            &:hover {
+                background: rgba($foreground, 0.08);
+                border-color: rgba($foreground, 0.15);
+                color: $foreground;
+            }
+
+            &.active {
+                background: linear-gradient(135deg, rgba($color1, 0.25), rgba($color1, 0.05));
+                border-color: rgba($color1, 0.4);
+                color: $color1;
+                text-shadow: 0 0 10px rgba($color1, 0.3);
+                box-shadow: inset 0 -3px 0 0 $color1, 0 4px 15px rgba($color1, 0.15);
+            }
+        }
+    }
+
+    // Bloque 3: PESTAÑAS (Tabs con aire tipográfico)
+    .subnav-tabs {
+        background: rgba($background, 0.5);
+        border: none;
+        border-radius: 8px;
+        padding: 4px;
+        margin-top: 8px;
+        box-shadow: none;
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: rgba($foreground, 0.52);
+            transition: all 0.15s ease;
+
+            label {
+                font-size: 12px;
+                font-weight: 600;
+            }
+
+            &.active {
+                background: rgba($foreground, 0.09);
+                color: $foreground;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            }
+
+            &:hover:not(.active) {
+                background: rgba($foreground, 0.04);
+                color: rgba($foreground, 0.85);
+            }
+        }
     }
 }
