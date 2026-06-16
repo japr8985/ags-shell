@@ -380,3 +380,50 @@
     font-weight: 500;
     letter-spacing: 0.5px;
 }
+
+.audio-tab-container {
+    padding: 12px;
+}
+
+.audio-slider-block {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.audio-icon-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.8);
+    
+    &:hover {
+        color: #3b82f6; // Un destello azul moderno al pasar el mouse
+    }
+}
+
+.audio-scale {
+    // Estilos personalizados para la barra de GTK4 si quieres hacerla más delgada
+    trough {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        min-height: 8px;
+    }
+    highlight {
+        background-color: #3b82f6; // Color de la barra activa
+        border-radius: 4px;
+    }
+    slider {
+        min-height: 14px;
+        min-width: 14px;
+        border-radius: 50%;
+        background-color: #ffffff;
+    }
+}
+.fallback-audio-icon {
+    font-size: 28px;
+}
+.network-fallback-icon {
+    font-size: 24px;
+}

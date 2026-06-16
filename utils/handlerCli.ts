@@ -1,9 +1,10 @@
 import { execAsync } from "ags/process";
 import { toggleChatWindow } from "../widget/custtom-bar-nodes/ChatWindow";
-import { toggleRightPanel } from "../widget/custtom-bar-nodes/Right-panel";
+import { toggleRightPanel } from "../widget/panels/RightPanel";
+
 
 enum CLI_REQUEST {
-    SHOW_RIGHT_PANEL = 'toggle-right',
+    TOGGLE_RIGHT_PANEL = 'toggle-right',
     TOGGLE_AI_CHAT = 'toggle-ai-chat',
     RANDOM_WALLPAPER = 'random-wallpaper'
 }
@@ -11,7 +12,7 @@ const handlerRequest = (request: string) => {
     const [command, ...params] = request.split(' ');
 
     switch(command) {
-        case CLI_REQUEST.SHOW_RIGHT_PANEL:
+        case CLI_REQUEST.TOGGLE_RIGHT_PANEL:
             toggleRightPanel();
             break;
         case CLI_REQUEST.TOGGLE_AI_CHAT:

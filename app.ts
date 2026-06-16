@@ -4,7 +4,8 @@ import Bar from "./widget/Bar"
 import { exec } from "ags/process";
 import ChatWindow from "./widget/custtom-bar-nodes/ChatWindow"; // <-- Importamos la ventana
 import { Gdk } from "ags/gtk4";
-import RightPanel from "./widget/custtom-bar-nodes/Right-panel";
+// import RightPanel from "./widget/custtom-bar-nodes/Right-panel";
+import RightPanel from "./widget/panels/RightPanel/index";
 import handlerCli from "./utils/handlerCli";
 
 

@@ -4,14 +4,16 @@ import GLib from "gi://GLib?version=2.0"
 import { execAsync } from "ags/process"
 import AstalIo from "gi://AstalIO?version=0.1"
 import { createBinding } from "ags";
-import QuickToggles from "./right-panel-btns/QuickToggles"
+// import QuickToggles from "./right-panel-btns/QuickToggles"
 import Notifd from "gi://AstalNotifd"
 
-import { rebootBtn, powerOffBtn, suspendBtn, lockBtn } from '../panels/session-block'
 import { RebootBtn } from "../panels/session/reboot"
 import { PowerOffBtn } from "../panels/session/poweroff"
 import { SuspendBtn } from "../panels/session/suspend"
 import { LockScreen } from "../panels/session/lockscreen"
+import { CloseSession } from "../panels/session/close-session"
+import { AudioTabContent } from "../panels/tabs-content/audio/index";
+
 const notifd = Notifd.get_default();
 const { Variable } = AstalIo
 
@@ -292,13 +294,13 @@ export default function RightPanel({ gdkmonitor, monitorIndex }: RightSideBarPro
           </box>
 
           <box class="header-actions" spacing={8} valign={Gtk.Align.CENTER}>
-            { RebootBtn()}
-            <button class="action-btn" onClicked={() => execAsync("hyprctl dispatch exit")}><label label="󰍃" /></button>
+            {/* { RebootBtn()} */}
+            {/* <button class="action-btn" onClicked={() => execAsync("hyprctl dispatch exit")}><label label="󰍃" /></button> */}
           </box>
         </box>
 
         {/* BLOQUE 2: QUICK TOGGLES */}
-        <QuickToggles />
+        {/* <QuickToggles /> */}
 
         {/* BLOQUE 3: PESTAÑAS MEDIAS (Enlazadas reactivamente al estado activeTab) */}
         <box class="subnav-tabs" spacing={4} homogeneous={true}>
@@ -339,9 +341,7 @@ export default function RightPanel({ gdkmonitor, monitorIndex }: RightSideBarPro
             }} />
 
 
-            <box name="tab-1" valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
-              <label class="user-uptime" label="Controles de Audio Próximamente..." />
-            </box>
+            {/* { activeTab === "audio" && <AudioTabContent /> } */}
 
 
             <box name="tab-2" valign={Gtk.Align.CENTER} halign={Gtk.Align.CENTER}>
@@ -388,9 +388,7 @@ export default function RightPanel({ gdkmonitor, monitorIndex }: RightSideBarPro
           { SuspendBtn() }
 
           {/* Cerrar Sesión Hyprland */}
-          <button class="session-btn" onClicked={() => execAsync("hyprctl dispatch exit")}>
-            <label label="󰈆" />
-          </button>
+          { CloseSession() }
 
           {/* Apagar */}
           { PowerOffBtn() }
