@@ -427,3 +427,37 @@
 .network-fallback-icon {
     font-size: 24px;
 }
+.weather-tab-container {
+    padding: 20px;
+}
+.weather-card {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.weather-big-icon {
+    font-size: 54px;
+    color: #3b82f6;
+}
+.weather-temp {
+    font-size: 46px;
+    font-weight: bold;
+}
+.weather-condition {
+    font-size: 16px;
+    text-transform: capitalize;
+    color: rgba(255, 255, 255, 0.7);
+}
+.weather-details {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+}
+.weather-refresh-btn {
+    margin-top: 10px;
+    padding: 6px 16px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: none;
+    &:hover { background-color: rgba(255, 255, 255, 0.1); }
+}

@@ -6,6 +6,7 @@ import { activeTab } from "./tabs";
 // Tus importaciones de contenido reales
 import { renderNotificationList } from "./tabs-content/notifd"; 
 import { AudioTabContent } from "./tabs-content/audio/index"; 
+import { WeatherTabContent } from "./tabs-content/weather";
 
 export function TabContentArea(): Gtk.Widget {
     return (
@@ -40,16 +41,25 @@ export function TabContentArea(): Gtk.Widget {
                     scrollAudio.set_child(AudioTabContent());
                     self.add_named(scrollAudio, "audio");
 
-                    // --- PESTAÑA 2: RED ---
-                    const networkBox = new Gtk.Box({
-                        valign: Gtk.Align.CENTER,
-                        halign: Gtk.Align.CENTER,
-                        orientation: Gtk.Orientation.VERTICAL,
-                        spacing: 10
-                    });
-                    networkBox.append(new Gtk.Label({ label: "󰂯", css_classes: ["network-fallback-icon"], }));
-                    networkBox.append(new Gtk.Label({ label: "Configuración de Red Próximamente...", css_classes: ["user-uptime"], opacity: 0.6 }));
-                    self.add_named(networkBox, "network");
+                    // --- PESTAÑA 2: CLIMA (SOLUCIÓN IMPERATIVA ULTRA RECTIVA) ---
+    const scrollWeather = new Gtk.ScrolledWindow({
+        has_frame: false,
+        hscrollbar_policy: Gtk.PolicyType.NEVER,
+        vscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
+        vexpand: true,
+        hexpand: true
+    });
+    
+    // Forzamos el nombre en el core de C antes de mapear el contenido
+    scrollWeather.set_name("weather"); 
+
+    // TRUCO MAESTRO: En lugar de renderizar el bindeo en JSX, 
+    // hacemos que el ScrolledWindow actualice su child nativo en C cada vez que el clima cambie.
+    // Importamos la función directo (asegúrate de que WeatherTabContent devuelva un Gtk.Widget puro)
+    scrollWeather.set_child(WeatherTabContent());
+
+    // Lo registramos de forma impecable en el Stack de C
+    self.add_named(scrollWeather, "weather");
                 }}
             />
         </box>

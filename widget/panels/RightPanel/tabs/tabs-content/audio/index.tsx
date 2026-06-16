@@ -16,66 +16,79 @@ export function AudioTabContent(): Gtk.Widget {
     return (
         <box orientation={Gtk.Orientation.VERTICAL} spacing={16} class="audio-tab-container" vexpand hexpand>
             <box orientation={Gtk.Orientation.VERTICAL} spacing={10} class="audio-slider-block">
-                
+
                 <box orientation={Gtk.Orientation.HORIZONTAL} spacing={12}>
                     <button class="audio-icon-btn" onClicked={() => toggleMute()}>
-                        <label 
-                            class="audio-icon" 
-                            label={createBinding(speaker, "volume")(() => {
+                        {/* FIX 1: Cambiamos el bindeo para que escuche "mute" en lugar de "volume".
+                          Como el mute cambia el estado visual del icono, ahora reaccionará al milisegundo.
+                        */}
+                        <label
+                            class="audio-icon"
+                            label={createBinding(speaker, "mute")(() => {
                                 if (speaker.mute) return "󰝟";
                                 const vol = speaker.volume;
                                 if (vol === 0) return "󰕿";
                                 if (vol < 0.3) return "󰖀";
                                 if (vol < 0.7) return "󰕾";
                                 return "󰕾";
-                            })} 
+                            })}
                         />
                     </button>
-                    
+
                     <label class="audio-title" label="Volumen Principal" hexpand halign={Gtk.Align.START} />
-                    
-                    <label 
-                        class="audio-percentage" 
+
+                    {/* El porcentaje sí puede seguir escuchando a "volume" */}
+                    <label
+                        class="audio-percentage"
                         label={createBinding(speaker, "volume")(() => {
                             return `${Math.round(speaker.volume * 100)}%`;
-                        })} 
+                        })}
                     />
                 </box>
 
-                {/* INYECCIÓN NATIVA DEL SLIDER DE GTK4 */}
+                {/* INYECCIÓN NATIVA DEL SLIDER DE GTK4 CORREGIDA CON TIMEOUT */}
                 <box $={(self) => {
-                    // Instanciamos el GtkScale real de C de forma horizontal
                     const scale = new Gtk.Scale({
                         orientation: Gtk.Orientation.HORIZONTAL,
                         hexpand: true,
-                        draw_value: false, // Oculta el contador nativo de GTK
+                        draw_value: false,
                         round_digits: 2
                     });
 
-                    // Añadimos su clase de CSS para tus estilos SCSS
                     scale.add_css_class("audio-scale");
-
-                    // Configuramos los límites del rango de PipeWire (0.0 a 1.0)
                     scale.set_range(0, 1);
                     scale.set_increments(0.01, 0.05);
 
-                    // Bindeo de lectura: Sincroniza el slider si cambias el volumen desde afuera
+                    // TRUCO MAESTRO: Esperamos a que GTK renderice el widget en pantalla 
+                    // antes de inyectarle el volumen inicial de PipeWire. ¡Adiós barra en cero!
+                    import("gi://GLib").then((GLib) => {
+                        GLib.default.timeout_add(GLib.default.PRIORITY_DEFAULT, 50, () => {
+                            if (scale && speaker) {
+                                scale.set_value(speaker.volume);
+                            }
+                            return false; // Retornar false destruye el timeout para que corra UNA sola vez
+                        });
+                    });
+
+                    // Bindeo de lectura: Sincroniza el slider si cambias el volumen desde atajos del teclado
                     createBinding(speaker, "volume")((val) => {
-                        // Evita bucles de eventos bloqueantes si el usuario está arrastrando el slider
-                        if (!scale.is_pointer_inside || !scale.has_focus) {
+                        // Si el usuario no tiene el foco físico del mouse encima del slider, lo actualizamos
+                        if (!scale.has_focus) {
                             scale.set_value(val);
                         }
                     });
 
                     // Bindeo de escritura: Modifica PipeWire al arrastrar el slider
                     scale.connect("value-changed", () => {
-                        speaker.volume = scale.get_value();
+                        const currentVal = scale.get_value();
+                        // Solo mutamos si el valor cambió significativamente para evitar bucles
+                        if (Math.abs(speaker.volume - currentVal) > 0.001) {
+                            speaker.volume = currentVal;
+                        }
                     });
 
-                    // Insertamos el slider de C dentro del contenedor JSX
                     self.append(scale);
                 }} />
-                
             </box>
         </box>
     ) as any;

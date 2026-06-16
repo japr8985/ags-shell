@@ -2,7 +2,7 @@
 import Wp from "gi://AstalWp";
 // Obtenemos el singleton del servicio de PipeWire a través de WirePlumber
 export const wp = Wp.get_default();
-console.log(wp)
+
 // Exportamos el endpoint por defecto de las cornetas/audífonos de salida principal
 export const speaker = wp.audio.default_speaker;
 

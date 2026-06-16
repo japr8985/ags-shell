@@ -21,7 +21,7 @@ export function TabNavigation(): Gtk.Widget {
         <box class="subnav-tabs" spacing={4} homogeneous={true}>
             {TabButton("notifications", "󰵚  Notificaciones")}
             {TabButton("audio", "󰕾  Audio")}
-            {TabButton("weather", "󰂯  Red")}
+            {TabButton("weather", "󰖕  Clima")}
         </box>
     ) as any;
 }
