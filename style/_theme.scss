@@ -15,11 +15,11 @@
 
 .Bar {
     @include liquid-glass;
-    // font-family: "JetBrainsMono Nerd Font", "Noto Color Emoji", sans-serif;
+    font-family: "JetBrainsMono Nerd Font", "Noto Color Emoji", sans-serif;
     // CORREGIDO: Eliminados los porcentajes (100%) prohibidos en GTK4 CSS.
     // Dejamos que el 'hexpand' del JSX maneje el estiramiento geométrico.
     .bar-window-container {
-        background: transparent;
+        background: black;
     }
 
     .bar-layout {
@@ -460,4 +460,59 @@
     background-color: rgba(255, 255, 255, 0.05);
     border: none;
     &:hover { background-color: rgba(255, 255, 255, 0.1); }
+}
+/* Contenedor de la ventana flotante (Debe ser totalmente invisible para no recortar la sombra) */
+.popup-window-container {
+    background: transparent;
+    padding: 10px; /* Margen interno para que la sombra del vidrio respire */
+}
+
+.popup-notif-card {
+    background: rgba(15, 18, 25, 0.75) !important; // Más oscuro para dar contraste al texto blanco
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 14px !important;
+    padding: 16px !important;
+    min-width: 340px !important;
+    max-width: 340px !important;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5) !important;
+
+    .popup-notif-icon {
+        font-size: 20px !important;
+        color: #3b82f6 !important;
+        background: rgba(59, 130, 246, 0.12) !important;
+        padding: 10px !important;
+        border-radius: 10px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+    }
+
+    .popup-notif-title {
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        color: #ffffff !important;
+        margin-bottom: 2px;
+    }
+
+    .popup-notif-body {
+        font-size: 12px !important;
+        color: rgba(255, 255, 255, 0.75) !important;
+    }
+
+    .popup-notif-close {
+        background: transparent !important;
+        border: none !important;
+        color: rgba(255, 255, 255, 0.3) !important;
+        padding: 4px !important;
+        border-radius: 6px !important;
+        min-width: 24px !important;
+        min-height: 24px !important;
+        
+        &:hover {
+            background: rgba(239, 68, 68, 0.15) !important;
+            color: #ef4444 !important;
+        }
+        
+        // Removemos bordes o sombras nativos que los temas de Fedora meten a los botones por defecto
+        box-shadow: none !important;
+    }
 }

@@ -1,167 +1,161 @@
-import { Gtk } from "ags/gtk4"
-import AstalNotifd from "gi://AstalNotifd?version=0.1";
+// widget/panels/RightPanel/tabs/tabs-content/notifd/index.tsx
+import { Gtk } from "ags/gtk4";
+import { createBinding } from "ags";
+import { notifd, dismissNotification, clearAllNotifications } from "./notifd";
 
-const notifd = AstalNotifd.get_default();
-
-export function getNotificationIcon(appNameOrIcon: string): string {
-  if (!appNameOrIcon) return "󰂚";
-  const name = appNameOrIcon.toLowerCase();
-  if (name.includes("steam")) return "󰓓";
-  if (name.includes("discord")) return "󰙯";
-  if (name.includes("telegram")) return "󰔁";
-  if (name.includes("spotify")) return "󰓇";
-  if (name.includes("firefox") || name.includes("chrome") || name.includes("brave")) return "󰖟";
-  if (name.includes("terminal") || name.includes("kitty") || name.includes("foot")) return "󰞷";
-  if (name.includes("update") || name.includes("dnf") || name.includes("fedora")) return "󰚰";
-  return "󰂚";
+/**
+ * Mapeo inteligente de iconos según la aplicación (De tu versión original)
+ */
+function getNotificationIcon(appNameOrIcon: string): string {
+    if (!appNameOrIcon) return "󰂚";
+    const name = appNameOrIcon.toLowerCase();
+    if (name.includes("steam")) return "󰓓";
+    if (name.includes("discord")) return "󰙯";
+    if (name.includes("telegram")) return "󰔁";
+    if (name.includes("spotify")) return "󰓇";
+    if (name.includes("firefox") || name.includes("chrome") || name.includes("brave")) return "󰖟";
+    if (name.includes("terminal") || name.includes("kitty") || name.includes("foot")) return "󰞷";
+    if (name.includes("update") || name.includes("dnf") || name.includes("fedora")) return "󰚰";
+    return "󰂚";
 }
 
 export function renderNotificationList(): Gtk.Widget {
-  return (
-    <box
-      orientation={Gtk.Orientation.VERTICAL}
-      spacing={8}
-      class="notification-list"
-      vexpand
-      $={(self) => {
+    return (
+        <box orientation={Gtk.Orientation.VERTICAL} spacing={12} class="notif-tab-container" vexpand={true} hexpand={true}>
+            
+            {/* 1. HEADER REPOSITORIO (Contador y Botón arriba fijos) */}
+            <box 
+                orientation={Gtk.Orientation.HORIZONTAL} 
+                class="notif-header-bar"
+                hexpand={true}
+                visible={createBinding(notifd, "notifications")((list) => list && list.length > 0)}
+            >
+                <label 
+                    class="notif-count-label" 
+                    halign={Gtk.Align.START} 
+                    hexpand={true} 
+                    label={createBinding(notifd, "notifications")((list) => {
+                        const count = list ? list.length : 0;
+                        if (count === 0) return "No hay notificaciones";
+                        if (count === 1) return "1 notificación";
+                        return `${count} notificaciones`;
+                    })} 
+                />
+                <button class="notif-clear-all-btn" onClicked={() => clearAllNotifications()}>
+                    <label label="󰎟  Limpiar Todo" />
+                </button>
+            </box>
 
-        const syncNotifications = () => {
-          // 1. Limpieza de hijos de C
-          let child = self.get_first_child();
-          while (child) {
-            const next = child.get_next_sibling();
-            self.remove(child);
-            child = next;
-          }
+            {/* 2. CONTENEDOR DINÁMICO DE TARJETAS (Implementación original robusta) */}
+            <box 
+                orientation={Gtk.Orientation.VERTICAL} 
+                spacing={10} 
+                vexpand={true} 
+                hexpand={true}
+                $={(self) => {
+                    const syncNotifications = () => {
+                        // Limpieza segura mediante punteros de hermanos de C (Tu código original)
+                        let child = self.get_first_child();
+                        while (child) {
+                            const next = child.get_next_sibling();
+                            self.remove(child);
+                            child = next;
+                        }
 
-          const rawNotifications = notifd.notifications;
+                        const rawNotifications = notifd.notifications;
 
-          // ESTADO VACÍO
-          // ==========================================
-          // REEMPLAZAR ÚNICAMENTE EL BLOQUE DEL ESTADO VACÍO:
-          // ==========================================
-          if (!rawNotifications || rawNotifications.length === 0) {
-            // 1. Contenedor principal con expansión total y centrado simétrico
-            const emptyBox = new Gtk.Box({
-              orientation: Gtk.Orientation.VERTICAL,
-              spacing: 14, // Un poco más de aire entre el icono y el texto
-              hexpand: true,
-              vexpand: true
-            });
-            emptyBox.set_valign(Gtk.Align.CENTER);
-            emptyBox.set_halign(Gtk.Align.CENTER);
+                        // ESTADO VACÍO ZEN
+                        if (!rawNotifications || rawNotifications.length === 0) {
+                            const emptyBox = new Gtk.Box({
+                                orientation: Gtk.Orientation.VERTICAL,
+                                spacing: 14,
+                                hexpand: true,
+                                vexpand: true
+                            });
+                            emptyBox.set_valign(Gtk.Align.CENTER);
+                            emptyBox.set_halign(Gtk.Align.CENTER);
 
-            // 2. Icono con clase CSS dedicada y opacidad baja para ese look elegante
-            const emptyIcon = new Gtk.Label({
-              label: "󰂛",
-              opacity: 0.35
-            });
-            emptyIcon.get_style_context().add_class("empty-notif-icon");
-            // Opcional: Si quieres forzar el tamaño directo por código antes del CSS
-            emptyIcon.set_css_classes(["empty-notif-icon"]);
+                            const emptyIcon = new Gtk.Label({ label: "󰂛", opacity: 0.35 });
+                            emptyIcon.set_css_classes(["empty-notif-icon"]);
 
-            // 3. Texto descriptivo refinado
-            const emptyText = new Gtk.Label({
-              label: "Todo al día", // Cambiado por un término más minimalista, o mantén "Bandeja limpia"
-              opacity: 0.5
-            });
-            emptyText.get_style_context().add_class("empty-notif-text");
+                            const emptyText = new Gtk.Label({ label: "Todo al día", opacity: 0.5 });
+                            emptyText.set_css_classes(["empty-notif-text"]);
 
-            // Ensamblamos el layout centrado
-            emptyBox.append(emptyIcon);
-            emptyBox.append(emptyText);
-            self.append(emptyBox);
-            return;
-          }
+                            emptyBox.append(emptyIcon);
+                            emptyBox.append(emptyText);
+                            self.append(emptyBox);
+                            return;
+                        }
 
-          // 2. ORDENACIÓN EN PILA
-          const stackedNotifications = [...rawNotifications].reverse();
+                        // ORDENACIÓN EN PILA (Las más nuevas arriba)
+                        const stackedNotifications = [...rawNotifications].reverse();
 
-          // 3. CONSTRUCCIÓN IMPERATIVA USANDO SETTERS NATIVOS
-          stackedNotifications.forEach((n) => {
-            const timeString = new Date(n.time * 1000).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: false
-            });
+                        // CONSTRUCCIÓN IMPERATIVA ULTRA ESTABLE
+                        stackedNotifications.forEach((n) => {
+                            const timeString = new Date(n.time * 1000).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: false
+                            });
 
-            const iconLabel = getNotificationIcon(n.appName || n.appIcon);
+                            const iconLabel = getNotificationIcon(n.appName || n.appIcon);
 
-            // Contenedor de la tarjeta
-            const card = new Gtk.Box({
-              orientation: Gtk.Orientation.HORIZONTAL,
-              spacing: 12
-            });
-            card.get_style_context().add_class("notif-card");
+                            // Maquetación de la tarjeta
+                            const card = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 12 });
+                            card.get_style_context().add_class("notif-card");
 
-            // Icono
-            const icon = new Gtk.Label({ label: iconLabel });
-            icon.get_style_context().add_class("notif-icon");
-            icon.set_valign(Gtk.Align.CENTER);
+                            // Icono Dinámico
+                            const icon = new Gtk.Label({ label: iconLabel });
+                            icon.get_style_context().add_class("notif-icon");
+                            icon.set_valign(Gtk.Align.CENTER);
 
-            // Caja central de textos (Compacta)
-            const textContainer = new Gtk.Box({
-              orientation: Gtk.Orientation.VERTICAL,
-              spacing: 2,
-              hexpand: true
-            });
-            textContainer.set_valign(Gtk.Align.CENTER); // FIX: Asignación por setter nativo
+                            // Cuerpo de Texto
+                            const textContainer = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 2, hexpand: true });
+                            textContainer.set_valign(Gtk.Align.CENTER);
 
-            const title = new Gtk.Label({
-              label: n.summary || "",
-              wrap: true
-            });
-            title.get_style_context().add_class("notif-title");
-            title.set_halign(Gtk.Align.START); // FIX: Asignación por setter nativo
+                            const title = new Gtk.Label({ label: n.summary || "", wrap: true });
+                            title.get_style_context().add_class("notif-title");
+                            title.set_halign(Gtk.Align.START);
 
-            const body = new Gtk.Label({
-              label: n.body || "",
-              wrap: true
-            });
-            body.get_style_context().add_class("notif-body");
-            body.set_halign(Gtk.Align.START); // FIX: Asignación por setter nativo
+                            const body = new Gtk.Label({ label: n.body || "", wrap: true });
+                            body.get_style_context().add_class("notif-body");
+                            body.set_halign(Gtk.Align.START);
 
-            textContainer.append(title);
-            textContainer.append(body);
+                            textContainer.append(title);
+                            textContainer.append(body);
 
-            // Contenedor derecho de acciones
-            const actionContainer = new Gtk.Box({
-              orientation: Gtk.Orientation.VERTICAL,
-              spacing: 4
-            });
-            actionContainer.set_valign(Gtk.Align.CENTER); // FIX: Asignación por setter nativo
+                            // Botones de acción y hora (Derecha)
+                            const actionContainer = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 4 });
+                            actionContainer.set_valign(Gtk.Align.CENTER);
 
-            const time = new Gtk.Label({ label: timeString });
-            time.get_style_context().add_class("notif-time");
+                            const time = new Gtk.Label({ label: timeString });
+                            time.get_style_context().add_class("notif-time");
 
-            const dismissBtn = new Gtk.Button({
-              child: new Gtk.Label({ label: "󰅖" })
-            });
-            dismissBtn.get_style_context().add_class("notif-dismiss-btn");
-            dismissBtn.set_valign(Gtk.Align.CENTER); // FIX: Asignación por setter nativo
-            dismissBtn.set_halign(Gtk.Align.CENTER); // FIX: Asignación por setter nativo
-            dismissBtn.connect("clicked", () => n.dismiss());
+                            const dismissBtn = new Gtk.Button({ child: new Gtk.Label({ label: "󰅖" }) });
+                            dismissBtn.get_style_context().add_class("notif-dismiss-btn");
+                            dismissBtn.set_valign(Gtk.Align.CENTER);
+                            dismissBtn.set_halign(Gtk.Align.CENTER);
+                            
+                            // Acción del botón cerrar individual
+                            dismissBtn.connect("clicked", () => dismissNotification(n.id));
 
-            actionContainer.append(time);
-            actionContainer.append(dismissBtn);
+                            actionContainer.append(time);
+                            actionContainer.append(dismissBtn);
 
-            // Ensamblaje
-            card.append(icon);
-            card.append(textContainer);
-            card.append(actionContainer);
+                            // Ensamblaje final de la fila
+                            card.append(icon);
+                            card.append(textContainer);
+                            card.append(card.get_first_child() ? actionContainer : actionContainer); 
+                            
+                            self.append(card);
+                        });
+                    };
 
-            self.append(card);
-          });
-        };
-
-        if ('dont_disturb' in notifd) {
-          (notifd as any).dont_disturb = true;
-        }
-
-        // Arranque inicial y conexión
-        syncNotifications();
-        notifd.connect("notify::notifications", () => syncNotifications());
-      }}
-    />
-  ) as any;
+                    // Sincronización nativa por señales de GObject (El secreto del éxito)
+                    syncNotifications();
+                    notifd.connect("notify::notifications", () => syncNotifications());
+                }}
+            />
+        </box>
+    ) as any;
 }

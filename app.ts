@@ -7,7 +7,7 @@ import { Gdk } from "ags/gtk4";
 // import RightPanel from "./widget/custtom-bar-nodes/Right-panel";
 import RightPanel from "./widget/panels/RightPanel/index";
 import handlerCli from "./utils/handlerCli";
-
+import NotificationPopup from "./widget/popups/notification";
 
 const scss = `./style/main.scss`;
 const css = `/tmp/ags-style.css`;
@@ -44,6 +44,7 @@ app.start({
         Bar(gdkmonitor);
         ChatWindow(gdkmonitor);
         RightPanel({ gdkmonitor, monitorIndex: index})
+        NotificationPopup(gdkmonitor);
       });
       
       // monitors.map(Bar);

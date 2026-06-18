@@ -20,7 +20,7 @@ export const weatherInfo = Variable.new<WeatherData | null>(null) as any;
  */
 export function fetchWeather() {
     // Pedimos el clima de Lechería, Venezuela en formato JSON limpio (?format=j1)
-    const cmd = "curl -s 'https://wttr.in/Lecheria?format=j1'";
+    const cmd = "curl -s 'https://wttr.in/?format=j1'";
 
     execAsync(["bash", "-c", cmd])
         .then((res) => {
