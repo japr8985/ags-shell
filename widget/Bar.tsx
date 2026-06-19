@@ -8,6 +8,9 @@ import Wallpaper from "./custtom-bar-nodes/Wallpaper"
 import AIChatButton from "./custtom-bar-nodes/AIChatButton"
 import Clock from "./custtom-bar-nodes/Clock"
 import Hardware from "./custtom-bar-nodes/Hardware"
+import { RevealerBtn } from "./revealer"
+import { MusicSimpleModule } from "./bar/components/MusicModule"
+
 
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
@@ -15,33 +18,6 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
   const hypr = AstalHyprland.Hyprland.get_default();
 
-  // Creamos la ventana de la barra
-  // const win = (
-  //   <window
-  //     visible
-  //     name="bar"
-  //     class="Bar"
-  //     gdkmonitor={gdkmonitor}
-  //     exclusivity={Astal.Exclusivity.EXCLUSIVE}
-  //     anchor={TOP | LEFT | RIGHT}
-  //     application={app}
-  //   >
-  //     <box class="left-modules">
-  //       <box class="glass-capsule">
-  //         <AIChatButton />
-  //         <Wallpaper />
-  //         <Workspaces />
-  //       </box>
-  //     </box>
-  //     <box css={'background:red'}>
-  //       <box class="glass-capsule">
-  //         <AIChatButton />
-  //         <Wallpaper />
-  //         <Workspaces />
-  //       </box>
-  //     </box>
-  //   </window>
-  // ) as any;
   const win = (
     <window
       visible
@@ -67,6 +43,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         <box $type="center" halign={Gtk.Align.CENTER}>
           <box class="glass-capsule clock-capsule">
             <Clock />
+            <MusicSimpleModule />
           </box>
         </box>
 
