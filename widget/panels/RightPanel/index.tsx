@@ -15,7 +15,7 @@ interface RightSideBarProps {
     gdkmonitor: Gdk.Monitor;
     monitorIndex: number;
 }
-const { Variable } = AstalIO;
+
 
 const rightPanelInstances = new Map<number, any>();
 

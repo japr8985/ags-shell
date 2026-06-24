@@ -1,6 +1,6 @@
-import { toggleChatWindow } from "./ChatWindow";
+import { toggleChatWindow } from "../ChatWindow";
 
-function AIChatButton() {
+export function AIChatButton() {
   return (
     <button
       class="ai-chat-btn"
@@ -11,5 +11,3 @@ function AIChatButton() {
     </button>
   );
 }
-
-export default AIChatButton;

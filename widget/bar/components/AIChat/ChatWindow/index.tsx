@@ -20,7 +20,7 @@ export function toggleChatWindow() {
   }
 }
 
-function ChatWindow(gdkmonitor: Gdk.Monitor) {
+export function ChatWindow(gdkmonitor: Gdk.Monitor) {
   const { TOP, BOTTOM, LEFT } = Astal.WindowAnchor;
 
   return (
@@ -64,7 +64,7 @@ function ChatWindow(gdkmonitor: Gdk.Monitor) {
             }}
           />
           <button class="chat-send-btn">
-            <label label="󰒡 " />
+            <label label="󰒡" />
           </button>
         </box>
       </box>
@@ -72,4 +72,3 @@ function ChatWindow(gdkmonitor: Gdk.Monitor) {
   );
 }
 
-export default ChatWindow;

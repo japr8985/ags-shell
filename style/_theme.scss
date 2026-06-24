@@ -15,7 +15,7 @@
 
 .Bar {
     @include liquid-glass;
-    font-family: "JetBrainsMono Nerd Font", "Noto Color Emoji", sans-serif;
+    // font-family: "JetBrainsMono Nerd Font", "Noto Color Emoji", sans-serif;
     // CORREGIDO: Eliminados los porcentajes (100%) prohibidos en GTK4 CSS.
     // Dejamos que el 'hexpand' del JSX maneje el estiramiento geométrico.
     .bar-window-container {
@@ -74,6 +74,19 @@
             &:hover {
                 color: $color1; // Se ilumina con el acento dinámico de tu wallpaper
             }
+        }
+    }
+    .bar-dropdown-trigger-btn  {
+        background: transparent;
+        color: rgba($foreground, 0.5);
+        border-radius: 4px;
+        padding: 0 8px;
+        margin-right: 4px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: $glass-highlight;
+            color: $color1;
         }
     }
     // ==========================================
@@ -158,7 +171,7 @@
     color: rgba($foreground, 0.5);
     border-radius: 4px;
     padding: 0 8px;
-    margin-right: 6px;
+    margin-right: 4px;
     border: 1px solid transparent;
     transition: all 0.2s ease;
 
@@ -473,7 +486,7 @@
     border-radius: 14px !important;
     padding: 16px !important;
     min-width: 340px !important;
-    max-width: 340px !important;
+    // max-width: 340px !important;
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5) !important;
 
     .popup-notif-icon {
@@ -516,80 +529,148 @@
         box-shadow: none !important;
     }
 }
-/* Ventana de Dropdown invisible para no recortar la sombra */
-.dropdown-window-container {
-    background: transparent;
-    padding: 12px;
+
+
+/* Fondo general de la ventana overlay */
+window.launcher-window-overlay {
+    background-color: rgba(0, 0, 0, 0.45) !important;
 }
 
-/* Efecto Liquid Glass aplicado al Dropdown */
-.dropdown-glass-card {
-    background: rgba(14, 16, 22, 0.7) !important; // Vidrio oscuro translúcido
-    border: 1px solid rgba(255, 255, 255, 0.12) !important; // Borde esmerilado
-    border-radius: 20px !important; // Esquinas premium
-    padding: 20px !important;
-    min-width: 360px !important;
-    max-width: 360px !important;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55),
-                inset 0 1px 1px rgba(255, 255, 255, 0.1) !important; // Sombra pesada y glow interno
+.launcher-click-area {
+    background: transparent !important;
 }
 
-/* Maquetación de la tarjeta interna en C */
-.music-card-container {
-    .music-cover-art {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        background-position: center;
-        background-size: cover;
+/* El bloque central maestro de fAIyt (Forzado en tamaño de caja) */
+.launcher-main-content {
+    background-color: #111114 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8) !important;
+    
+    /* BLOQUEO DE GEOMETRÍA SEGURO */
+    min-width: 1100px !important;
+    max-width: 1100px !important;
+    min-height: 540px !important;
+    max-height: 540px !important;
+}
+
+/* Panel Izquierdo (800px útiles) */
+.launcher-left-panel {
+    background-color: #111114 !important;
+    min-width: 720px !important;
+    max-width: 720px !important;
+    min-height: 540px !important;
+    max-height: 540px !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.launcher-search-box-wrapper {
+    padding: 20px 24px 10px 24px !important;
+}
+
+.launcher-search-input {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 12px !important;
+    padding: 14px 18px !important;
+    font-size: 16px !important;
+    color: #ffffff !important;
+}
+
+.launcher-results-container {
+    padding: 10px 24px !important;
+}
+
+.launcher-results-scroller {
+    min-height: 350px !important;
+    max-height: 350px !important;
+}
+
+/* Cabeceras de categorías */
+.group-header-label {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+    letter-spacing: 1.2px !important;
+    margin-bottom: 6px !important;
+}
+
+/* Botones de elementos de la lista */
+.result-item-btn {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 10px !important;
+    padding: 8px 12px !important;
+    margin-bottom: 4px !important;
+    
+    &.selected, &:hover {
+        background: rgba(255, 255, 255, 0.04) !important;
+        border-color: rgba(255, 255, 255, 0.02) !important;
         
-        &.has-cover {
-            border: 1px solid transparent; // Quita el borde si hay imagen
-        }
-
-        .music-cover-icon {
-            font-size: 28px;
-            color: rgba(255, 255, 255, 0.25);
-            margin-top: 10px;
-        }
-    }
-
-    .music-title-txt {
-        font-weight: 700;
-        font-size: 15px;
-        color: #ffffff;
-        letter-spacing: -0.3px;
-    }
-
-    .music-artist-txt {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.7);
-    }
-
-    .music-control-btn {
-        background: rgba(59, 130, 246, 0.1); // Glow azul eléctrico
-        border: 1px solid rgba(59, 130, 246, 0.2);
-        color: #3b82f6; // Azul eléctrico brillante
-        border-radius: 10px;
-        padding: 8px;
-        min-width: 38px;
-        min-height: 38px;
-        font-size: 18px;
-        transition: all 150ms ease;
-
-        &:hover {
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid #3b82f6;
+        .item-icon-logo {
+            color: #3b82f6 !important;
         }
     }
 }
 
-/* Escenario Vacío */
-.music-empty-icon {
-    font-size: 40px;
-    color: rgba(255, 255, 255, 0.15);
+.item-icon-logo {
+    font-size: 22px !important;
+    color: rgba(255, 255, 255, 0.6) !important;
 }
-.music-empty-txt {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.4);
+
+.item-title {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+}
+
+.item-desc {
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Action Bar inferior */
+.launcher-action-bar {
+    background: rgba(0, 0, 0, 0.12) !important;
+    padding: 12px 24px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.03) !important;
+}
+
+.action-hint {
+    font-size: 11px !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Columna Derecha (400px útiles) */
+.launcher-detail-panel {
+    min-width: 380px !important;
+    max-width: 380px !important;
+    min-height: 540px !important;
+    max-height: 540px !important;
+    background-color: #0b0b0d !important;
+    padding: 24px !important;
+}
+
+.detail-screenshot-mock {
+    background: linear-gradient(135deg, #1a1a20, #252530) !important;
+    min-width: 300px !important;
+    min-height: 168px !important;
+    border-radius: 8px !important;
+}
+
+.detail-window-title {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+}
+
+.detail-label {
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.detail-value {
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-weight: 600 !important;
 }

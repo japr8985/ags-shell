@@ -47,7 +47,7 @@ export default function Hardware() {
                 />
             </box>
             <box class="hw-item" spacing={2} tooltipText="Memoria RAM Usada">
-                <label class="hw-icon ram" label="󰘚" /> {/* Glifo alternativo ultra-compatible */}
+                <label class="hw-icon ram" label="󰘚" /> 
                 <label
                     class="hw-value"
                     label="0%"
