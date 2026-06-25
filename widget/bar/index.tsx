@@ -1,20 +1,11 @@
-import app from "ags/gtk4/app"
-import { Astal, Gtk, Gdk } from "ags/gtk4"
-import { execAsync } from "ags/process"
-import { createPoll } from "ags/time"
-import Workspaces from "./components/Workspaces"
+import app from "ags/gtk4/app";
+import { Astal, Gtk, Gdk } from "ags/gtk4";
+import Workspaces from "./components/Workspaces";
 import AstalHyprland from 'gi://AstalHyprland';
-import { AIChatButton } from "./components/AIChat/ChatButton"
-// import Wallpaper from "./custtom-bar-nodes/Wallpaper"
-// import AIChatButton from "./custtom-bar-nodes/AIChatButton"
-// import Clock from "./custtom-bar-nodes/Clock"
-// import Hardware from "./custtom-bar-nodes/Hardware"
-// import { RevealerBtn } from "./revealer"
-// import { MusicSimpleModule } from "./bar/components/MusicModule"
-// import { RevealerModule } from "./bar/components/Revealer"
-// import { MusicBarContent } from "./bar/components/Music"
-// import { DropdownTrigger } from "./bar/components/DropdownWindow/DropdownTrigger"
-// import { Wallpaper } from "./bar/components/Wallpaper"
+import { AIChatButton } from "./components/AIChat/ChatButton";
+import { Hardware } from "./components/Hardware";
+import { Wallpaper } from "./components/Wallpaper";
+import Clock from "./components/Clock";
 
 
 
@@ -40,7 +31,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
           <box class="glass-capsule">
             <AIChatButton />
             {/* <AIChatButton /> */}
-            {/* <Wallpaper /> */}
+            <Wallpaper />
             {/* <Wallpaper /> */}
             <Workspaces />
           </box>
@@ -49,7 +40,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         {/* BLOQUE CENTRAL: Marcado obligatoriamente con $type="center" */}
         <box $type="center" halign={Gtk.Align.CENTER}>
           <box class="glass-capsule clock-capsule">
-            {/* <Clock /> */}
+            <Clock />
           </box>
           <box class="bar-right-container">
             {/* <DropdownTrigger icon="󰎈" namespace="music" classNamespace="music-trigger" /> */}
@@ -59,7 +50,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         {/* BLOQUE DERECHO: Marcado obligatoriamente con $type="end" */}
         <box $type="end" halign={Gtk.Align.END}>
           <box class="glass-capsule status-capsule">
-            {/* <Hardware /> */}
+            <Hardware />
             {/*  */}
           </box>
         </box>
