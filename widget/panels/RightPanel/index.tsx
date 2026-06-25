@@ -43,7 +43,7 @@ export default function RightPanel({ gdkmonitor, monitorIndex }: RightSideBarPro
         visible={false}
         name={`right-panel-${monitorIndex}`}
         namespace="right-panel"
-        class="RightPanel"
+        class="panel"
         gdkmonitor={gdkmonitor}
         exclusivity={Astal.Exclusivity.NORMAL}
         anchor={TOP | BOTTOM | RIGHT}
@@ -53,7 +53,7 @@ export default function RightPanel({ gdkmonitor, monitorIndex }: RightSideBarPro
         }}>
         {/* User Header */}
         <box
-            class="panel-container"
+            class="container"
             orientation={Gtk.Orientation.VERTICAL}
             spacing={16}
             widthRequest={360}

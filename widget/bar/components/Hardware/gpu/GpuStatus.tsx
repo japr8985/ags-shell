@@ -12,11 +12,32 @@ export function GpuTemp() {
     });
     return (
         <box class="hw-item" spacing={4} tooltipText="Temperatura de la GPU">
-            <label class="hw-icon gpu-temp" label="GPU " />
+            <label class="hw-icon gpu-temp" label="" />
             <label
                 class="hw-value"
                 label="0°C"
                 $={(self) => { labelRef = self; }}
+            />
+        </box>
+    );
+}
+
+
+export function GpuStatus() {
+    let gpuLabelRef: Gtk.Label | null = null;
+    const GPU_USAGE_CMD = "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits";
+
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 2000, () => {
+        return updateMetrics(gpuLabelRef, GPU_USAGE_CMD, "%");
+    });
+
+    return (
+        <box class="hw-item" spacing={4} tooltipText="Uso de GPU">
+            <label class="hw-icon gpu" label="󰢮 " />
+            <label
+                class="hw-value"
+                label="0%" 
+                $={(self) => { gpuLabelRef = self; }} 
             />
         </box>
     );

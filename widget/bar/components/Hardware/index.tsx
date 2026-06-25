@@ -1,7 +1,7 @@
 import { Gtk } from "ags/gtk4";
 
 import RamStatus from "./ram/RamStatus";
-import { GpuTemp } from "./gpu/GpuStatus";
+import { GpuStatus, GpuTemp } from "./gpu/GpuStatus";
 import { CpuStatus, CpuTemp } from "./cpu/CpuStatus";
 
 export function Hardware() {
@@ -11,6 +11,7 @@ export function Hardware() {
         <CpuStatus />
         <CpuTemp />
         <RamStatus />
+        <GpuStatus />
         <GpuTemp />
 
     </box>);
